@@ -12,7 +12,7 @@ export function App() {
   async function onFinish(values: FormValues) {
     const { quantity, title } = values;
 
-    await fetch("http://localhost:3001/generate", {
+    await fetch("https://bingo-generator-back-end.onrender.com/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ quantity, title }),
