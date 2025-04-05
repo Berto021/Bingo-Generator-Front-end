@@ -2,13 +2,30 @@ import "./App.css";
 import mainImage from "./assets/main.svg";
 import { Input, Form, InputNumber } from "antd";
 
-type FormValues = { title: string; game_quantity: number };
+type FormValues = { title: string; quantity: number };
+
 const labelValue = (value: string | undefined) => {
   return <span className="text-pink-600 font-semibold">{value}</span>;
 };
 
 export function App() {
-  function onFinish(values: FormValues) {}
+  async function onFinish(values: FormValues) {
+    const { quantity, title } = values;
+
+    await fetch("http://localhost:3001/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ quantity, title }),
+    }).then(async (res) => {
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "cartelas.zip";
+      link.click();
+    });
+  }
+
   return (
     <>
       <div className="flex justify-center items-center gap-x-4 mb-6">
@@ -32,14 +49,14 @@ export function App() {
         </Form.Item>
 
         <Form.Item
-          label={labelValue(" Quantidade de Jogos")}
-          name="game_quantity"
+          label={labelValue("Quantidade de Jogos")}
+          name="quantity"
           rules={[
             { required: true, message: "Informe a quantidade de cartelas." },
           ]}
           className="w-full"
         >
-          <InputNumber placeholder="Ex: 12" />
+          <InputNumber placeholder="Ex: 12" min={1} />
         </Form.Item>
 
         <Form.Item>
