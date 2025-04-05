@@ -44,7 +44,7 @@ export function App() {
         </Form.Item>
 
         <Form.Item
-          label={labelValue("Quantidade de Jogos")}
+          label={labelValue("Quantidade de Cartelas")}
           name="quantity"
           rules={[
             { required: true, message: "Informe a quantidade de cartelas." },
