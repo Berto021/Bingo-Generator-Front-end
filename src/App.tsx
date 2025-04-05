@@ -1,29 +1,24 @@
 import "./App.css";
 import mainImage from "./assets/main.svg";
-import { Input, Form, InputNumber } from "antd";
+import { Input, Form, InputNumber, Button } from "antd";
+import { useGenerateBingoCards } from "./hook";
 
-type FormValues = { title: string; quantity: number };
+export type FormValues = { title: string; quantity: number };
 
 const labelValue = (value: string | undefined) => {
   return <span className="text-pink-600 font-semibold">{value}</span>;
 };
 
 export function App() {
+  const [form] = Form.useForm();
+  const { mutateAsync: generateBingo, isPending } = useGenerateBingoCards();
+  console.log(isPending);
+
   async function onFinish(values: FormValues) {
     const { quantity, title } = values;
 
-    await fetch("https://bingo-generator-back-end.onrender.com/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ quantity, title }),
-    }).then(async (res) => {
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "cartelas.zip";
-      link.click();
-    });
+    await generateBingo({ quantity, title });
+    form.resetFields();
   }
 
   return (
@@ -60,12 +55,13 @@ export function App() {
         </Form.Item>
 
         <Form.Item>
-          <button
-            type="submit"
-            className=" bg-gray-950 hover:bg-gray-800 text-white font-semibold py-3 cursor-pointer shadow transition-colors duration-300 w-[50%] mb-3 rounded-2xl"
+          <Button
+            htmlType="submit"
+            loading={isPending}
+            className="!bg-gray-950 !hover:bg-gray-800 !text-white !font-semibold !py-3 !shadow !transition-colors !duration-300 !w-[50%] !mb-3 !rounded-2xl !border-none !h-auto"
           >
-            Gerar Cartelas
-          </button>
+            {isPending ? "Carregando..." : "Gerar Cartelas"}
+          </Button>
         </Form.Item>
       </Form>
     </>
