@@ -1,35 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import mainImage from "./assets/main.svg";
+import { Input, Form, Row, InputNumber } from "antd";
 
-function App() {
-  const [count, setCount] = useState(0)
+type FormValues = { title: string; game_quantity: number };
+const labelValue = (value: string | undefined) => {
+  return <span className="text-pink-600 font-semibold">{value}</span>;
+};
 
+export function App() {
+  function onFinish(values: FormValues) {
+    console.log(values);
+  }
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="flex justify-center items-center gap-x-4 mb-6">
+        <h1 className="text-4xl font-bold text-pink-500 drop-shadow-md ">
+          Bingo de Chá de Bebê
+        </h1>
+        <img src={mainImage} alt="Ilustração" className="h-12" />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
 
-export default App
+      <Form
+        layout="vertical"
+        onFinish={onFinish}
+        className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md"
+      >
+        <h2 className="text-2xl font-bold text-pink-500 my-4 drop-shadow">
+          Gerador de Cartelas
+        </h2>
+
+        <Form.Item label={labelValue("Título do Bingo")} name="title">
+          <Input placeholder="Ex: Chá da Maria" />
+        </Form.Item>
+
+        <Form.Item
+          label={labelValue(" Quantidade de Jogos")}
+          name="game_quantity"
+          rules={[
+            { required: true, message: "Informe a quantidade de cartelas." },
+          ]}
+          className="w-full"
+        >
+          <InputNumber placeholder="Ex: 12" />
+        </Form.Item>
+
+        <Form.Item>
+          <button
+            type="submit"
+            className=" bg-gray-950 hover:bg-gray-800 text-white font-semibold py-3 cursor-pointer shadow transition-colors duration-300 w-[50%] mb-3 rounded-2xl"
+          >
+            Gerar Cartelas
+          </button>
+        </Form.Item>
+      </Form>
+    </>
+  );
+}
