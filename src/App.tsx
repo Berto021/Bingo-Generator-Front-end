@@ -1,6 +1,6 @@
 import "./App.css";
 import mainImage from "./assets/main.svg";
-import { Input, Form, Row, InputNumber } from "antd";
+import { Input, Form, InputNumber } from "antd";
 
 type FormValues = { title: string; game_quantity: number };
 const labelValue = (value: string | undefined) => {
@@ -8,9 +8,7 @@ const labelValue = (value: string | undefined) => {
 };
 
 export function App() {
-  function onFinish(values: FormValues) {
-    console.log(values);
-  }
+  function onFinish(values: FormValues) {}
   return (
     <>
       <div className="flex justify-center items-center gap-x-4 mb-6">
